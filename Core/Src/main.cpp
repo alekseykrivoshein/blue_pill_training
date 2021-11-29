@@ -98,7 +98,7 @@ class OperatingMode {
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led1.port, thermoregulator::constants::mode_led1.pin, GPIO_PIN_SET);
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led2.port, thermoregulator::constants::mode_led2.pin, GPIO_PIN_RESET);
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led3.port, thermoregulator::constants::mode_led3.pin, GPIO_PIN_RESET);
-        printf("low mode, yellow address LED\r\n");
+        printf("low mode, yellow address LED\r\n"); //Конструкция устройства изменилась, теперь цвет адресного светодиода не зависит от режима, зависит только от уровня батареи
         break;
       case thermoregulator::OperatingModeType::MIDDLE:
         params_ = thermoregulator::constants::middle_mode;
@@ -195,32 +195,34 @@ int main(void)
       printf("short button press\r\n");
       mode.change_mode();
     } else if(button_press_state == ButtonPressType::LONG_PRESS) {
-      printf("long button press, powering off\r\n");
+      printf("long button press, powering off\r\n"); 
     }
 
     if(adc_ready) {
       adc_ready = false;
 
       auto bat_voltage = get_battery_voltage(&hadc1);
-      printf("battery voltage: %f\r\n", bat_voltage);
+      printf("battery voltage: %f\r\n", bat_voltage); //Вот здесь можно менять цвет светодиода от зелёного до красного
     }
-
+   
     if(adc_tick >= 10) {
       adc_tick = 0;
       adc_ready = true;
       HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+     
+      //Ещё для отладки было бы неплохо добавить измерение температуры в цикле раз и отправка в порт или на дебаггер
 
       auto charge_state = charging_status();
       switch (charge_state)
       {
       case thermoregulator::ChargingStatus::DEVICE_CHARGING:
-        printf("device is charging\r\n");
+        printf("device is charging\r\n");  //Добавить мерцание адресного светодиода (плавное нарастание и убывание яркости) синим цветом
         break;
       case thermoregulator::ChargingStatus::DEVICE_CHARGED:
-        printf("device is charged\r\n");
+        printf("device is charged\r\n"); //Добавить свечение адресного светодиода синим цветом
         break;
       case thermoregulator::ChargingStatus::DEVICE_WORKING:
-        printf("device is working\r\n");
+        printf("device is working\r\n"); //Добавить свечение адресного светодиода цветом в зависимости от уровня батареи
         break;
       default:
         printf("unknown charging status\r\n");
