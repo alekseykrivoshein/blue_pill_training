@@ -202,25 +202,27 @@ int main(void)
       adc_ready = false;
 
       auto bat_voltage = get_battery_voltage(&hadc1);
-      printf("battery voltage: %f\r\n", bat_voltage); //коммент. Вот здесь можно менять цвет светодиода от зелёного до красного
+      printf("battery voltage: %f\r\n", bat_voltage); //Вот здесь можно менять цвет светодиода от зелёного до красного
     }
-
+   
     if(adc_tick >= 10) {
       adc_tick = 0;
       adc_ready = true;
       HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+     
+      //Ещё для отладки было бы неплохо добавить измерение температуры в цикле раз и отправка в порт или на дебаггер
 
       auto charge_state = charging_status();
       switch (charge_state)
       {
       case thermoregulator::ChargingStatus::DEVICE_CHARGING:
-        printf("device is charging\r\n");  //коммент. Добавить мерцание адресного светодиода (плавное нарастание и убывание яркости) синим цветом
+        printf("device is charging\r\n");  //Добавить мерцание адресного светодиода (плавное нарастание и убывание яркости) синим цветом
         break;
       case thermoregulator::ChargingStatus::DEVICE_CHARGED:
-        printf("device is charged\r\n"); //коммент. Добавить свечение адресного светодиода синим цветом
+        printf("device is charged\r\n"); //Добавить свечение адресного светодиода синим цветом
         break;
       case thermoregulator::ChargingStatus::DEVICE_WORKING:
-        printf("device is working\r\n"); //коммент. Добавить свечение адресного светодиода цветом в зависимости от уровня батареи
+        printf("device is working\r\n"); //Добавить свечение адресного светодиода цветом в зависимости от уровня батареи
         break;
       default:
         printf("unknown charging status\r\n");
