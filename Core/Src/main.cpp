@@ -98,7 +98,7 @@ class OperatingMode {
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led1.port, thermoregulator::constants::mode_led1.pin, GPIO_PIN_SET);
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led2.port, thermoregulator::constants::mode_led2.pin, GPIO_PIN_RESET);
         HAL_GPIO_WritePin(thermoregulator::constants::mode_led3.port, thermoregulator::constants::mode_led3.pin, GPIO_PIN_RESET);
-        printf("low mode, yellow address LED\r\n"); //коммент. Конструкция устройства изменилась, теперь цвет адресного светодиода не зависит от режима, зависит только от уровня батареи
+        printf("low mode, yellow address LED\r\n"); //Конструкция устройства изменилась, теперь цвет адресного светодиода не зависит от режима, зависит только от уровня батареи
         break;
       case thermoregulator::OperatingModeType::MIDDLE:
         params_ = thermoregulator::constants::middle_mode;
